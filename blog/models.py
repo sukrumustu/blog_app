@@ -7,13 +7,13 @@ def rewrite_slug(content):
     return content.replace(' ', '-').lower()
 
 STATUS_CHOICES = (
-    ('DRAFT', 'd'),
-    ('PUBLISHED', 'p'),
+    ('d','DRAFT'),
+    ('p', 'PUBLISHED'),
 )
 
 CATEGORY_CHOICES = (
-    ('frontend', 'f'),
-    ('backend', 'b'),
+    ('f', 'frontend'),
+    ('b', 'backend'),
     
 )
 
@@ -24,7 +24,7 @@ class Post(models.Model):
     author= models.ForeignKey(User, on_delete=models.CASCADE)
     category=models.CharField(max_length=10, choices=CATEGORY_CHOICES)
     image= models.URLField(max_length=5000, blank=True)
-    status= models.CharField(max_length=10, choices=STATUS_CHOICES)
+    status= models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     published_date= models.DateTimeField(auto_now_add=True)
     last_updated= models.DateTimeField(auto_now=True)
     slug= AutoSlugField(populate_from="title", slugify_function=rewrite_slug)
@@ -32,26 +32,29 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
-    @property
-    def comments(self):
-        return self.comment_set.all()
+    
+    # şimdilik kullanmadım. Modele fieldler ekliyor. 
+    
+    # @property
+    # def comments(self):
+    #     return self.comment_set.all()
 
-    @property
-    def get_comment_count(self):
-        return self.comment_set.count()
+    # @property
+    # def get_comment_count(self):
+    #     return self.comment_set.count()
 
-    @property
-    def get_view_count(self):
-        return self.postview_set.count()
+    # @property
+    # def get_view_count(self):
+    #     return self.postview_set.count()
 
-    @property
-    def get_like_count(self):
-        return self.like.count()
+    # @property
+    # def get_like_count(self):
+    #     return self.like.count()
     
     
 class Comment(models.Model):
     user= models.ForeignKey(User, on_delete=models.CASCADE)
-    post= models.ForeignKey(Post, on_delete=models.CASCADE)
+    post= models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     time_stamp = models.DateTimeField(auto_now_add=True)
     content=models.TextField()
     

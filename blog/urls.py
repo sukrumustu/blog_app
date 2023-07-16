@@ -1,11 +1,12 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .views import PostMVS
+from .views import PostListApiView
 
-router = routers.DefaultRouter()
-router.register('posts',PostMVS)
+# router = routers.DefaultRouter()
+# router.register('posts',PostMVS)
 
 urlpatterns = [
-    path("", include(router.urls)),
+    path("posts/", PostListApiView.as_view()),
+    # path("", include(router.urls)),
 ]

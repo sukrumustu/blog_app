@@ -1,13 +1,16 @@
 from django.shortcuts import render
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import PostSerializer, CommentSerializer, PostViewSerializer, LikeSerializer
 from .models import Post, Comment, PostView, Like
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
 # Create your views here.
-class PostListCreateApiView(ListCreateAPIView):
+class PostListApiView(ListAPIView):
     
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    lookup_field = 'slug'
+    permission_classes=[AllowAny,]
+    queryset = Post.objects.filter(status="d")
+
+    # lookup_field = 'slug'
