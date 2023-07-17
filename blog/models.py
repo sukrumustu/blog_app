@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from django_extensions.db.fields import AutoSlugField 
 
 # Create your models here.
-def rewrite_slug(content):
-    return content.replace(' ', '-').lower()
+
 
 STATUS_CHOICES = (
     ('d','DRAFT'),
@@ -27,10 +26,13 @@ class Post(models.Model):
     status= models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     published_date= models.DateTimeField(auto_now_add=True)
     last_updated= models.DateTimeField(auto_now=True)
-    slug= AutoSlugField(populate_from="title", slugify_function=rewrite_slug)
+    slug= AutoSlugField(populate_from="title")
     
     def __str__(self):
         return self.title
+    
+    def slugify_function(content):
+        return content.replace(' ', '-').lower()
     
     
     # şimdilik kullanmadım. Modele fieldler ekliyor. 

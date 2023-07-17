@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Post, Comment, PostView, Like
+import datetime
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -24,7 +25,7 @@ class PostSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Post
-        fields = ('id', 'title', 'content', 'author', 'category', 'image', 'comments_count', 'likes_count', 'post_views_count', 'status', 'published_date', 'last_updated',)
+        fields = ('id', 'title', 'content', 'author', 'category', 'image', 'comments_count', 'likes_count', 'post_views_count', 'status', 'published_date', 'last_updated', 'slug',)
         
    
     def get_comments_count(self, obj):
@@ -38,7 +39,13 @@ class PostSerializer(serializers.ModelSerializer):
     
     def get_author(self, obj):
         return obj.author.username
-        
+    
+    def get_time_hour(self, obj):
+        return datetime.datetime.strftime(obj.published_date, "%H:%M")
+    
+    def get_time_hour(self, obj):
+        return datetime.datetime.strftime(obj.last_updated, "%H:%M")
+    
     
         
 class PostViewSerializer(serializers.ModelSerializer):

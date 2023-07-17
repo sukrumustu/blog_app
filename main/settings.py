@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     #third party libraries
     'rest_framework',
     'rest_framework.authtoken',
-    'dj_rest_auth',
+    # 'dj_rest_auth',
     'django_extensions',
     
     #my apps
