@@ -1,9 +1,11 @@
 from django.urls import path, include
 from rest_framework import routers
 
-from .views import PostListApiView, PostCreateApi, PostDetailApi, PostUpdateApi, PostDeleteApi
+from .views import PostListApiView, PostCreateApi, PostDetailApi, PostUpdateApi, PostDeleteApi, CommentView, LikeView
 
-# router = routers.DefaultRouter()
+router = routers.DefaultRouter()
+router.register('comments', CommentView)
+router.register('likes', LikeView)
 # router.register('posts',PostMVS)
 
 urlpatterns = [
@@ -13,6 +15,6 @@ urlpatterns = [
     path("detail/<str:slug>/", PostDetailApi.as_view()),
     path("update/<str:slug>/", PostUpdateApi.as_view()),
     path("delete/<str:slug>/", PostDeleteApi.as_view()),
-    # path("", include(router.urls)),
+    path("", include(router.urls)),
     
 ]

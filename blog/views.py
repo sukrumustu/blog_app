@@ -6,6 +6,8 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated, I
 
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import viewsets
+# from .permissions import IsOwnerOrReadOnly
 
 
 # Create your views here.
@@ -113,7 +115,67 @@ class PostDeleteApi(DestroyAPIView):
     #     self.perform_destroy(instance)
     #     return Response(status=status.HTTP_204_NO_CONTENT)
 
+class CommentView(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class= CommentSerializer
+    permission_classes=[IsAuthenticatedOrReadOnly]
+    
+    def perform_create(self, serializer):
+        serializer.save(user = self.request.user)
+    
+    
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.create_user == self.request.user:
+            return self.update(request, *args, **kwargs)
+        else:
+            data = {
+                "message": "You are not authorized to perform this operation"
+            }
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+        
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user.is_superuser or instance.create_user == self.request.user:
+            return self.destroy(request, *args, **kwargs)
+        else:
+            data = {
+                "message": "You are not authorized to perform this operation"
+            }
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+        
 
+class LikeView(viewsets.ModelViewSet):
+    queryset = Like.objects.all()
+    serializer_class=LikeSerializer
+    permission_classes=[IsAuthenticatedOrReadOnly]
+    
+    def perform_create(self, serializer):
+        serializer.save(user = self.request.user)
+    
+    
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.create_user == self.request.user:
+            return self.update(request, *args, **kwargs)
+        else:
+            data = {
+                "message": "You are not authorized to perform this operation"
+            }
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+        
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if request.user.is_superuser or instance.create_user == self.request.user:
+            return self.destroy(request, *args, **kwargs)
+        else:
+            data = {
+                "message": "You are not authorized to perform this operation"
+            }
+            return Response(data, status=status.HTTP_401_UNAUTHORIZED)
+
+    
+    
     
     
     

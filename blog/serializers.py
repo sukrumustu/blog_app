@@ -5,11 +5,16 @@ import datetime
 
 class CommentSerializer(serializers.ModelSerializer):
     
-    user = serializers.StringRelatedField()
+    # user = serializers.StringRelatedField()
+    # user_id = serializers.IntegerField()
+    
     post = serializers.StringRelatedField()
+    post_id = serializers.IntegerField()
     class Meta:
         model = Comment
-        fields = ('id', 'user', 'post', 'time_stamp', 'content',)
+        fields = ('id', 'post', 'post_id', 'time_stamp', 'content', 'user_id', 'user')
+
+
 
 
 class PostSerializer(serializers.ModelSerializer):
